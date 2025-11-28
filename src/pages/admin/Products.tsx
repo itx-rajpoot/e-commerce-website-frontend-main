@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Product, Category } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { api } from '@/lib/api';
+import { api, ASSET_BASE } from '@/lib/api';
 import { Plus, Edit, Trash2, Upload, Image as ImageIcon } from 'lucide-react';
 
 const Products = () => {
@@ -165,7 +165,7 @@ const Products = () => {
     // If product.image is already a full URL (Cloudinary), return it directly
     if (!product || !product.image) return '';
     if (product.image.startsWith('http') || product.image.startsWith('data:')) return product.image;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/products/${product.image}`;
+    return `${ASSET_BASE}/uploads/products/${product.image}`;
   };
 
   if (loading) {

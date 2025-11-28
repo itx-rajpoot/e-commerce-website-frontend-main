@@ -7,7 +7,7 @@ import { Product } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
-import { api } from '@/lib/api';
+import { api, ASSET_BASE } from '@/lib/api';
 import { ShoppingCart, Package, Shield, ArrowLeft, MessageCircle, Heart } from 'lucide-react';
 
 const ProductDetail = () => {
@@ -111,8 +111,9 @@ const ProductDetail = () => {
   };
 
   const getImageUrl = (imagePath: string) => {
-    if (imagePath.startsWith('http')) return imagePath;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/products/${imagePath}`;
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) return imagePath;
+    return `${ASSET_BASE}/uploads/products/${imagePath}`;
   };
 
   if (loading) {

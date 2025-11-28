@@ -10,7 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { api } from '@/lib/api';
+import { api, ASSET_BASE } from '@/lib/api';
 import { Plus, Edit, Trash2, Image as ImageIcon, MoveUp, MoveDown, Upload } from 'lucide-react';
 
 const Sliders = () => {
@@ -190,7 +190,7 @@ const Sliders = () => {
   const getImageUrl = (slider: Slider) => {
     if (!slider || !slider.image) return '';
     if (slider.image.startsWith('http') || slider.image.startsWith('data:')) return slider.image;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/sliders/${slider.image}`;
+    return `${ASSET_BASE}/uploads/sliders/${slider.image}`;
   };
 
   if (loading) {

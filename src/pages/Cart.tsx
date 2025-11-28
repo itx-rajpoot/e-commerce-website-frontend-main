@@ -58,8 +58,11 @@ const CartPage = () => {
   }
 
   const getImageUrl = (imagePath: string) => {
-    if (imagePath.startsWith('http')) return imagePath;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/products/${imagePath}`;
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) return imagePath;
+    // Importing ASSET_BASE inline to keep this file local (no top-level import change needed)
+    const ASSET_BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:5000');
+    return `${ASSET_BASE}/uploads/products/${imagePath}`;
   };
 
   return (

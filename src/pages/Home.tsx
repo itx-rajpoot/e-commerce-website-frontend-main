@@ -8,7 +8,7 @@ import { Product, Slider, Category } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
-import { api } from '@/lib/api';
+import { api, ASSET_BASE } from '@/lib/api';
 import { ArrowRight, Sparkles, Star, MapPin, Clock, Phone } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
@@ -83,13 +83,15 @@ const Home = () => {
   };
 
   const getSliderImageUrl = (slider: Slider) => {
-    if (slider.image.startsWith('http')) return slider.image;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/sliders/${slider.image}`;
+    if (!slider || !slider.image) return '';
+    if (slider.image.startsWith('http') || slider.image.startsWith('data:')) return slider.image;
+    return `${ASSET_BASE}/uploads/sliders/${slider.image}`;
   };
 
   const getProductImageUrl = (imagePath: string) => {
-    if (imagePath.startsWith('http')) return imagePath;
-    return `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/products/${imagePath}`;
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) return imagePath;
+    return `${ASSET_BASE}/uploads/products/${imagePath}`;
   };
 
   if (loading) {

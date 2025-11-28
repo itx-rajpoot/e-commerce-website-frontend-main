@@ -56,10 +56,11 @@ This repository contains a modern e-commerce frontend built with Vite, React, Ty
 Create a `.env` file at the project root (or set env vars in your host) with the following variable:
 
 ```
-VITE_API_URL=https://api.example.com/api
+VITE_API_URL=https://e-commerce-website-backend-main-1bv7eaam1-itx-rajpoots-projects.vercel.app
 ```
 
-- `VITE_API_URL` - Base URL of the backend API (defaults to `http://localhost:5000/api` if not provided).
+- `VITE_API_URL` - Base host of the backend API (for example `https://example-backend.vercel.app`).
+- The frontend will append `/api` when calling REST endpoints. If you don't set `VITE_API_URL`, the app falls back to `http://localhost:5000` for local development.
 
 
 ## Getting started (development)
@@ -120,7 +121,7 @@ VITE_API_URL=https://api.example.com/api
 - Routing: All routes are defined in `src/App.tsx`. Admin routes are under `/admin/*` and require appropriate authentication/role handling by the auth layer.
 
 - API client: `src/lib/api.ts` encapsulates REST calls. It:
-  - Reads `VITE_API_URL` from `import.meta.env` (falls back to `http://localhost:5000/api`).
+  - Reads `VITE_API_URL` from `import.meta.env` (falls back to `http://localhost:5000`). The client appends `/api` when making API requests.
   - Stores auth token in localStorage under `authToken` and attaches `Authorization: Bearer <token>` to requests when present.
   - Uses `fetch` and throws errors with messages from the API when responses are not ok.
 

@@ -1,6 +1,17 @@
 import { User, Slider, Message, Conversation, Product, Category, Cart, Order } from '@/types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// During development we proxy `/api` and `/uploads` through Vite dev server to avoid CORS.
+// Use a relative `/api` when in dev so requests go through the dev proxy.
+const API_BASE_URL = import.meta.env.DEV
+    ? '/api'
+    : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
+
+// Asset base used for building image/upload URLs. In dev this should be empty so
+// requests like `/uploads/...` are proxied by Vite. In production it should be the
+// backend host (no trailing `/api`).
+export const ASSET_BASE = import.meta.env.DEV
+    ? ''
+    : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}`;
 
 interface LoginCredentials {
     username: string;
@@ -55,14 +66,24 @@ class ApiService {
                 ...(this.token && { Authorization: `Bearer ${this.token}` }),
                 ...options.headers,
             },
-            ...options,
+                // Include credentials so cookies (if any) are forwarded when needed.
+                credentials: 'include',
+                ...options,
         };
 
         const response = await fetch(url, config);
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'Something went wrong' }));
-            throw new Error(errorData.message || 'Something went wrong');
+                // Improved error logging: attempt to read response body for debugging
+                const text = await response.text().catch(() => '');
+                let errorData: any = { message: 'Something went wrong' };
+                try {
+                    errorData = text ? JSON.parse(text) : { message: text || response.statusText };
+                } catch (e) {
+                    errorData = { message: text || response.statusText };
+                }
+                console.error('API Error', { url, status: response.status, body: errorData });
+                throw new Error(errorData.message || `HTTP ${response.status}`);
         }
 
         const data = await response.json();
@@ -144,6 +165,8 @@ class ApiService {
             headers: {
                 'Authorization': `Bearer ${this.token}`,
             },
+            // Let the browser set the Content-Type for multipart/form-data
+            credentials: 'include',
             body: formData,
         });
 
@@ -161,6 +184,7 @@ class ApiService {
             headers: {
                 'Authorization': `Bearer ${this.token}`,
             },
+            credentials: 'include',
             body: formData,
         });
 
@@ -260,6 +284,7 @@ class ApiService {
             headers: {
                 'Authorization': `Bearer ${this.token}`,
             },
+            credentials: 'include',
             body: formData,
         });
 
@@ -277,6 +302,7 @@ class ApiService {
             headers: {
                 'Authorization': `Bearer ${this.token}`,
             },
+            credentials: 'include',
             body: formData,
         });
 
