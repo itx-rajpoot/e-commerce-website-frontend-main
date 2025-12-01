@@ -76,7 +76,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <Phone className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="font-semibold mb-2">Phone</h3>
-                <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
+                <p className="text-sm text-muted-foreground">+92 344 0694754</p>
               </Card>
 
               <Card className="p-6 text-center shadow-soft animate-fade-in" style={{ animationDelay: '0.3s' }}>
@@ -84,7 +84,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <MapPin className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="font-semibold mb-2">Address</h3>
-                <p className="text-sm text-muted-foreground">123 Store Street, NY 10001</p>
+                <p className="text-sm text-muted-foreground">main street, Chak no. 60 RB, Balochani, District Faisalabad</p>
               </Card>
             </div>
 
